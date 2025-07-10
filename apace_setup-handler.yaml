@@ -1,0 +1,20 @@
+- name: Install and configure Apache
+  hosts: web
+  become: true
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: Copy homepage
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
